@@ -2,11 +2,23 @@
 use Mojolicious::Lite;
 use lib'./lib';
 use nukaduke;
+use Data::Dumper;
 
 
 get '/' => sub {
-  my $c = shift;
-  $c->render('index');
+  my $self = shift;
+  my $nukadoko = lookin('./nukadoko.yaml');
+  $self->stash(entries => $nukadoko);
+  $self->render('index');
+};
+
+post '/pickle' => sub {
+  my $self = shift;
+  my @params = $self->param;
+  if ($params[0] =~ /^(.+)\.x$/){
+    pickle('./nukadoko.yaml',$1)
+  }
+  $self->redirect_to('/');
 };
 
 app->start;
@@ -15,7 +27,55 @@ __DATA__
 @@ index.html.ep
 % layout 'default';
 % title '俺のぬか漬';
-
+<h1>俺のぬか漬</h1>
+<br>
+<br>
+<h1>漬ける!</h1>
+<div>
+<form action="/pickle" method="post" name="pickle">
+<p>
+<input type="image" src="/kyuuri.png" alt="kyuuri" name="kyuuri">
+<input type="image" src="/nasu.png" alt="nasu" name="nasu">
+<input type="image" src="/nagaimo.png" alt="nagaimo" name="nagaimo">
+</p>
+</form>
+</div>
+<br>
+<br>
+<br>
+<h1>now nukaduke'ing</h1>
+% my $i = 0;
+% for my $entry (@$entries){
+<table>
+      <tr>
+        <td>
+        <%= $entry->{$i}->[1] >
+        </td>
+      </tr>
+      <tr>
+        <td>
+        % $vegetable = $entry->{$i}->[0];
+        % if($vegetable eq 'kyuuri'){
+        <%= <img src="./public/kyuuri_p.png"> >
+        % }elsif($vegetable eq 'nasu'){
+        <%= <img src="./public/nasu_p.png"> >
+        % }else{
+        <%= <img src="./public/nagaimo_p.png"> >
+        % };
+        <img src="./public/kyuuri_p.png">
+        </td>
+      </tr>
+</table>
+<form action="/takeout" method="post" name="takeout">
+<p>
+<select name="nukadoko">
+<option value="0">2014-12-06 nagaimo</option>
+</select>
+<input type="submit" name="submit" value="取り出す">
+</p>
+</form>
+% $i++;
+% };
 @@ layouts/default.html.ep
 <!DOCTYPE html>
 <html>
