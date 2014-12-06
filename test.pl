@@ -8,7 +8,7 @@ use Data::Dumper;
 use lib "./lib";
 use nukaduke;
 
-pickle('./nukadoko.yaml', 'きゅうり');
+pickle('./nukadoko.yaml', 'kyuuri');
 
 my $now_nukadoko = lookin('./nukadoko.yaml');
 print Dumper $now_nukadoko;
