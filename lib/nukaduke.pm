@@ -41,7 +41,9 @@ sub takeout{
   open my $fh, ">", $filepath or die $!;
   for my $pickledobject (@$new_nukadoko){
     my @key = keys(%$pickledobject);
-    print $fh "$pickledobject->{$key[0]}->[0] $pickledobject->{$key[0]}->[1]\n";
+    my $vegetable = $pickledobject->{$key[0]}->[0];
+    my $date      = $pickledobject->{$key[0]}->[1];
+    print $fh "$vegetable $date\n";
   }
   close $fh;
   return 1;
