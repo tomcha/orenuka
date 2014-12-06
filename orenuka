@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
+use lib'./lib';
+use nukaduke;
 
-# Documentation browser under "/perldoc"
-plugin 'PODRenderer';
 
 get '/' => sub {
   my $c = shift;
@@ -14,8 +14,7 @@ __DATA__
 
 @@ index.html.ep
 % layout 'default';
-% title 'Welcome';
-Welcome to the Mojolicious real-time web framework!
+% title '俺のぬか漬';
 
 @@ layouts/default.html.ep
 <!DOCTYPE html>
