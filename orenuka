@@ -1,13 +1,13 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
 use lib'./lib';
-use nukaduke;
+use Nukaduke;
 use Data::Dumper;
 
 
 get '/' => sub {
   my $self = shift;
-  my $nukadoko = lookin('./nukadoko.yaml');
+  my $nukadoko = Nukaduke::lookin('./nukadoko.yaml');
   $self->stash(entries => $nukadoko);
   $self->render('index');
 };
@@ -16,7 +16,7 @@ post '/pickle' => sub {
   my $self = shift;
   my @params = $self->param;
   if ($params[0] =~ /^(.+)\.x$/){
-    pickle('./nukadoko.yaml',$1)
+    Nukaduke::pickle('./nukadoko.yaml',$1)
   }
   $self->redirect_to('/');
 };
@@ -24,9 +24,9 @@ post '/pickle' => sub {
 post '/takeout' => sub {
   my $self = shift;
   my @params = $self->param('nukadoko');
-  my $old_nukadoko = lookin('./nukadoko.yaml');
+  my $old_nukadoko = Nukaduke::lookin('./nukadoko.yaml');
   splice @$old_nukadoko, $params[0], 1;
-  takeout('./nukadoko.yaml', $old_nukadoko);
+  Nukaduke::takeout('./nukadoko.yaml', $old_nukadoko);
   $self->redirect_to('/');
 };
 
